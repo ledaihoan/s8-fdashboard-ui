@@ -1,0 +1,45 @@
+.header {
+    position: sticky;
+    top: 0;
+    background-color: var(--mantine-color-body);
+    transition: box-shadow 150ms ease;
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
+}
+
+.scrolled {
+    box-shadow: var(--mantine-shadow-sm);
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.th, .td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Optionally, if you want all content left-aligned */
+.td {
+    text-align: left;
+}
+
+/* If you prefer to center-align specific columns, use classes */
+.center-align {
+    text-align: center;
+}

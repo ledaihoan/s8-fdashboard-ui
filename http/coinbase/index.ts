@@ -8,6 +8,7 @@ dayjs.extend(timezone)
 export const QUERY_KEY_WRAPPER = {
   GET_ALL_CRYPTO_CURRENCIES: () => ['coinbase', 'getAllCryptoCurrencies'],
   GET_SPOT_PRICES: (fiatCurrency: string, date: string) => ['coinbase', `getSpotPrices_${fiatCurrency}_${date}`],
+  GET_ALL_TRADE_PAIRS: () => ['coinbase', 'getAllTradePairs'],
 };
 
 export const QUERY_FN_WRAPPERS = {
@@ -20,6 +21,12 @@ export const QUERY_FN_WRAPPERS = {
   GET_SPOT_PRICES: function (fiatCurrency: string, date: string) {
     return async () => {
       const response = await fetch(`https://api.coinbase.com/v2/prices/${fiatCurrency.toLowerCase()}/spot?date=${date}`);
+      return response.json();
+    }
+  },
+  GET_ALL_TRADE_PAIRS: function () {
+    return async () => {
+      const response = await fetch('https://api.pro.coinbase.com/products');
       return response.json();
     }
   }
@@ -41,6 +48,10 @@ export const useGetCryptoPriceQueries = (fiatCurrency: string) => {
       {
         queryKey: QUERY_KEY_WRAPPER.GET_SPOT_PRICES(fiatCurrency, yesterday),
         queryFn: QUERY_FN_WRAPPERS.GET_SPOT_PRICES(fiatCurrency, yesterday),
+      },
+      {
+        queryKey: QUERY_KEY_WRAPPER.GET_ALL_TRADE_PAIRS(),
+        queryFn: QUERY_FN_WRAPPERS.GET_ALL_TRADE_PAIRS()
       }
     ]
   });

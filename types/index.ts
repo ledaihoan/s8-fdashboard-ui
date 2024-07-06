@@ -7,4 +7,9 @@ export type CryptoFeaturedData = {
   symbol: string;
   value: string;
   change: number;
+  tradeAble: boolean;
+  marketCap?: string;
+  volume?: string;
+  supply?: string;
+  icon: string;
 };
