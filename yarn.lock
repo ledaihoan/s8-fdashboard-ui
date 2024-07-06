@@ -341,6 +341,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "@tabler/icons-react@npm:3.9.0"
+  dependencies:
+    "@tabler/icons": "npm:3.9.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/89fe826ed972e99ce8fa4d9390b8bc01a8cb1f1d662c34cc97977d01a9c7b7e51e755bfcceef212cb126441775dc66dcd08e048f9af7bd6fdf70c0a4ed748cf4
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.9.0":
+  version: 3.9.0
+  resolution: "@tabler/icons@npm:3.9.0"
+  checksum: 10c0/7e5497442fc70aa264e723d074c85f7a4cc5622318105bada0a7ec392d2c1d0b376cb21a8ed06cc9e696f8a8d29e16c547980fb4a1edddb66b47284be885226a
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:5.50.1":
   version: 5.50.1
   resolution: "@tanstack/query-core@npm:5.50.1"
@@ -363,6 +381,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10c0/6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4":
+  version: 4.17.6
+  resolution: "@types/lodash@npm:4.17.6"
+  checksum: 10c0/3b197ac47af9443fee8c4719c5ffde527d7febc018b827d44a6bc2523c728c7adfdd25196fdcfe3eed827993e0c41a917d0da6e78938b18b2be94164789f1117
   languageName: node
   linkType: hard
 
@@ -902,6 +927,13 @@ __metadata:
   version: 1.0.8
   resolution: "damerau-levenshtein@npm:1.0.8"
   checksum: 10c0/4c2647e0f42acaee7d068756c1d396e296c3556f9c8314bac1ac63ffb236217ef0e7e58602b18bb2173deec7ec8e0cac8e27cccf8f5526666b4ff11a13ad54a3
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.11":
+  version: 1.11.11
+  resolution: "dayjs@npm:1.11.11"
+  checksum: 10c0/0131d10516b9945f05a57e13f4af49a6814de5573a494824e103131a3bbe4cc470b1aefe8e17e51f9a478a22cd116084be1ee5725cedb66ec4c3f9091202dc4b
   languageName: node
   linkType: hard
 
@@ -2444,6 +2476,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
+  languageName: node
+  linkType: hard
+
 "loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -2477,12 +2516,16 @@ __metadata:
   dependencies:
     "@mantine/core": "npm:7.11.1"
     "@mantine/hooks": "npm:7.11.1"
+    "@tabler/icons-react": "npm:^3.9.0"
     "@tanstack/react-query": "npm:^5.50.1"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:20.14.8"
     "@types/react": "npm:18.3.3"
     "@types/react-dom": "npm:18.3.0"
+    dayjs: "npm:^1.11.11"
     eslint: "npm:8.57.0"
     eslint-config-next: "npm:14.2.4"
+    lodash: "npm:^4.17.21"
     next: "npm:14.2.4"
     postcss: "npm:^8.4.38"
     postcss-preset-mantine: "npm:1.15.0"

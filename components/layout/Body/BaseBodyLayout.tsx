@@ -26,9 +26,9 @@ export default function BaseBodyLayout({ Component, pageProps }: any) {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
+        <Group h="100%" px="md" justify="center" align="center">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Group justify="space-between" style={{ flex: 1 }}>
+          <Group align="center" justify="space-around" style={{ flex: 1 }}>
             <Text size="lg" fw={700}>Silver8</Text>
             <Group ml="xl" gap={0} visibleFrom="sm">
               { menuElements }
