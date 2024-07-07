@@ -1,3 +1,4 @@
+'use client'
 import { useRouter } from "next/router";
 import {useEffect, useState} from "react";
 import {
@@ -14,7 +15,7 @@ import {
   Text,
   Title
 } from "@mantine/core";
-
+import _ from "lodash";
 import {IconChevronRight, IconDownload, IconStar} from "@tabler/icons-react";
 
 import {useGetCryptoCandles} from "../../http/coinbase";
@@ -25,6 +26,7 @@ import {CryptoProductData, SpotPrice, TradingPair} from "../../types";
 import {CryptoMarketData} from "../../types/crypto-market-data";
 import {formatCandleData} from "../../utils/candle-data-utils";
 import AreaChart from "../../components/ApexChart/AreaChart";
+
 
 
 export default function PricePage() {
@@ -43,10 +45,10 @@ export default function PricePage() {
     cryptoCandleData,
   ] = results;
   useEffect(() => {
-    const allLoaded = results.every(result => !result.isLoading);
+    const allLoaded = cryptoCode && results.every(result => !result.isLoading);
     setIsLoading(!allLoaded);
-  }, [results]);
-  if (!cryptoCode || isLoading) {
+  }, [results, cryptoCode]);
+  if (isLoading) {
     return (
       <Container>
         <Loader />
@@ -58,21 +60,35 @@ export default function PricePage() {
     return <Text>An error occurred while fetching data.</Text>;
   }
 
-  const cryptoList = [...(cryptoListData.data.data as CryptoProductData[])];
-  const cryptoMarketDataList = [...(cryptoListMarketData.data.data as CryptoMarketData[])];
-  const cryptoCandleList = [...(cryptoCandleData.data as number[][])];
+  const cryptoList = [...(
+    _.get(cryptoListData, 'data.data') || [] as CryptoProductData[]
+  )];
+  const cryptoMarketDataList = [...(
+    _.get(cryptoListMarketData, 'data.data') || [] as CryptoMarketData[]
+  )];
+  const cryptoCandleList = [...(
+    _.get(cryptoCandleData, 'data') || [] as number[][]
+  )];
   const cryptoCandles = formatCandleData(cryptoCandleList);
+  console.log(cryptoCandleList[0], cryptoCandles[0]);
   const cryptoCandleSeries = [
     { name: 'Open', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.open]) },
     { name: 'Close', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.close]) },
     { name: 'Low', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.low]) },
     { name: 'High', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.high]) },
   ];
-  return (
+
+  const cryptoProductData = _.find(cryptoList, item => item.code === cryptoCode.toUpperCase());
+  const cryptoMarketData = _.find(cryptoMarketDataList, item => item.symbol === cryptoCode.toUpperCase());
+  const priceNew = cryptoCandles[0].close;
+  const priceOld = cryptoCandles[cryptoCandles.length - 1].close;
+  const priceChange = priceOld - priceNew;
+  const changePercentage = 100 * priceChange / priceOld;
+  return cryptoProductData && cryptoMarketData && (
     <Container size="xl">
       <Group mb="xl">
         <Group>
-          <Text size="xl" fw={700}>₿ BitcoinBTC</Text>
+          <Text size="xl" fw={700}>{ cryptoProductData.name}</Text>
         </Group>
         <Group>
           <ActionIcon variant="default"><IconStar size={18} /></ActionIcon>
@@ -92,9 +108,9 @@ export default function PricePage() {
       <Grid>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Paper p="md" withBorder>
-            <Text size="sm" c="dimmed">BTC Price</Text>
-            <Title order={2}>₫1,463,683,135.89</Title>
-            <Text c="green">₫29,120,682.78 (2.03%)</Text>
+            <Text size="sm" c="dimmed">{ cryptoProductData.code } Price</Text>
+            <Title order={2}>${ cryptoMarketData.priceUsd }</Title>
+            <Text c={priceChange > 0 ? 'green': 'red'}>${priceChange.toFixed(2)} ({changePercentage.toFixed(2)}%)</Text>
             <Group mt="md" gap="xs">
               {['1H', '1D', '1W', '1M', '1Y', 'ALL'].map((period) => (
                 <Button key={period} variant="default" size="xs">{period}</Button>
@@ -114,13 +130,13 @@ export default function PricePage() {
           <Paper p="md" withBorder>
             <Group align="flex-start">
               <div>
-                <Title order={4}>Trade Bitcoin today</Title>
+                <Title order={4}>Trade { cryptoProductData.name } today</Title>
                 <Text size="sm" c="dimmed">Create a Coinbase account to buy and sell Bitcoin on the most secure crypto exchange.</Text>
               </div>
-              <img src="/images/products/btc.svg" alt="Bitcoin trade" width={80} height={80} />
+              <img src={"/images/products/" + cryptoProductData.code.toLowerCase() + ".svg"} alt={ cryptoProductData.name + ' trade' } width={80} height={80} />
             </Group>
             <Button fullWidth rightSection={<IconChevronRight size={14} />} mt="md">
-              Buy Bitcoin
+              Buy { cryptoProductData.name }
             </Button>
           </Paper>
         </Grid.Col>
@@ -129,7 +145,7 @@ export default function PricePage() {
       <Accordion mt="xl">
         <Accordion.Item value="about">
           <Accordion.Control>
-            <Title order={3}>About Bitcoin</Title>
+            <Title order={3}>About { cryptoProductData.name }</Title>
           </Accordion.Control>
           <Accordion.Panel>
             <Text>The world&apos;s first cryptocurrency, Bitcoin is stored and exchanged securely on the internet through a digital ledger known as a blockchain. Bitcoins are divisible into smaller units known as satoshis — each satoshi is worth 0.00000001 bitcoin.</Text>
