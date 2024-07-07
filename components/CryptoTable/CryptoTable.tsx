@@ -1,14 +1,15 @@
 import DataTable from 'react-data-table-component';
 import {useRouter} from "next/router";
 
-import {CryptoFeaturedData} from "../../types";
+import {CryptoFeaturedProductData} from "../../types";
+import {numberDisplay} from "../../utils/number-utils";
 
-export default function CryptoTable({ data }: { data: CryptoFeaturedData[]}) {
+export default function CryptoTable({ data }: { data: CryptoFeaturedProductData[]}) {
   const columns = [
     {
       name: 'Name',
-      selector: (row: CryptoFeaturedData) => row.name,
-      cell: (row: CryptoFeaturedData) => (
+      selector: (row: CryptoFeaturedProductData) => row.name,
+      cell: (row: CryptoFeaturedProductData) => (
         <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={{marginRight: '10px'}}>
             <img src={row.icon} alt={row.name} width="20" height="20"/>
@@ -22,51 +23,52 @@ export default function CryptoTable({ data }: { data: CryptoFeaturedData[]}) {
     },
     {
       name: 'Price',
-      selector: (row: CryptoFeaturedData) => row.value,
-      format: (row: CryptoFeaturedData) => `${row.value}`,
+      selector: (row: CryptoFeaturedProductData) => row.priceUsd,
+      format: (row: CryptoFeaturedProductData) => `$${row.priceUsd}`,
       right: true,
       sortable: true
     },
     {
       name: 'Chart',
-      cell: (row: CryptoFeaturedData) => <div>{''}</div>, // You'd need to implement actual charts
+      cell: (row: CryptoFeaturedProductData) => <div>{''}</div>, // You'd need to implement actual charts
     },
     {
       name: 'Change',
-      selector: (row: CryptoFeaturedData) => row.change,
-      cell: (row: CryptoFeaturedData) => <div style={{color: row.change > 0 ? 'green' : row.change === 0 ? 'gray' : 'red'}}>{row.change.toFixed(2)}%</div>,
+      selector: (row: CryptoFeaturedProductData) => row.changePercent24Hr,
+      cell: (row: CryptoFeaturedProductData) => <div style={{color: row.changePercent24Hr > 0 ? 'green' : row.changePercent24Hr === 0 ? 'gray' : 'red'}}>{row.changePercent24Hr.toFixed(2)}%</div>,
       right: true,
       sortable: true
     },
     {
       name: 'Market Cap',
-      selector: (row: CryptoFeaturedData) => row.marketCap || '',
-      format: (row: CryptoFeaturedData) => row.marketCap ? `$${(parseFloat(row.marketCap) / 1e9).toFixed(1)}T` : '',
+      selector: (row: CryptoFeaturedProductData) => row.marketCapUsd || '',
+      format: (row: CryptoFeaturedProductData) => row.marketCapUsd ? numberDisplay(parseFloat(row.priceUsd)) : '',
       sortable: true,
       right: true
     },
     {
       name: 'Volume (24h)',
-      selector: (row: CryptoFeaturedData) => row.volume || '',
-      format: (row: CryptoFeaturedData) => row.volume ? `$${(parseFloat(row.volume) / 1e9).toFixed(1)}T` : '',
+      selector: (row: CryptoFeaturedProductData) => row.volumeUsd24Hr || '',
+      format: (row: CryptoFeaturedProductData) => row.volumeUsd24Hr ? numberDisplay(parseFloat(row.volumeUsd24Hr)) : '',
       sortable: true,
       right: true,
     },
     {
       name: 'Supply',
-      selector: (row: CryptoFeaturedData) => row.supply || '',
-      format: (row: CryptoFeaturedData) => row.supply ? `${row.supply.toLocaleString()}M` : '',
+      selector: (row: CryptoFeaturedProductData) => row.supply || '',
+      format: (row: CryptoFeaturedProductData) => row.supply ? numberDisplay(parseFloat(row.supply), '') : '',
+      right: true
     },
     {
       name: 'Trade',
-      selector: (row: CryptoFeaturedData) => `${row.tradeAble}`,
-      cell: (row: CryptoFeaturedData) => row.tradeAble ? <button style={{backgroundColor: 'blue', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '5px'}}>Trade</button> : '',
+      selector: (row: CryptoFeaturedProductData) => `${row.tradeAble}`,
+      cell: (row: CryptoFeaturedProductData) => row.tradeAble ? <button style={{backgroundColor: 'blue', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '5px'}}>Trade</button> : '',
     },
   ];
 
   const router = useRouter();
 
-  const handleRowClick = (row: CryptoFeaturedData) => {
+  const handleRowClick = (row: CryptoFeaturedProductData) => {
     router.push(`/price/${row.symbol.toLowerCase()}`);
   };
   return (

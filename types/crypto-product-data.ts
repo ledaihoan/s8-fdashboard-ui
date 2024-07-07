@@ -1,4 +1,4 @@
-export type CryptoData = {
+export type CryptoProductData = {
   asset_id: string;
   code: string;
   name: string;

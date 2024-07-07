@@ -1,14 +1,16 @@
-import {useEffect, useState} from "react";
-import {useGetCryptoPriceQueries} from "../http/coinbase";
-import {CURRENCY_PRECISION, FEATURED_FIAT_CURRENCY, FEATURED_FIAT_CURRENCY_SYMBOL} from "../constants";
-import {Container, Loader, Text} from "@mantine/core";
-import {CryptoData, CryptoFeaturedData, SpotPrice, TradingPair} from "../types";
-import _ from "lodash";
+import { useEffect, useState } from "react";
+import { Container, Loader, Text } from "@mantine/core";
+
+import { useGetBaseCryptoMarketData } from "../http/coinbase";
+import { MAIN_CURRENCY } from "../constants";
+import { CryptoProductData, SpotPrice, TradingPair, CryptoFeaturedProductData } from "../types";
 import CryptoTable from "../components/CryptoTable/CryptoTable";
+import {CryptoMarketData} from "../types/crypto-market-data";
+import {calculateFeaturedCrypto} from "../utils/featured-crypto";
 
 export default function ExplorePage() {
   const [isLoading, setIsLoading] = useState(true);
-  const results = useGetCryptoPriceQueries(FEATURED_FIAT_CURRENCY);
+  const results = useGetBaseCryptoMarketData(MAIN_CURRENCY);
   useEffect(() => {
     const allLoaded = results.every(result => !result.isLoading);
     setIsLoading(!allLoaded);
@@ -23,37 +25,29 @@ export default function ExplorePage() {
     );
   }
 
-  const [cryptoListData, todaySpotPriceData, yesterdaySpotPriceData, tradePairListData] = results;
+  const [
+    cryptoListData,
+    tradePairListData,
+    cryptoListMarketData,
+    coinbaseTodaySpotPrice,
+    coinbasePreviousSpotPrice,
+  ] = results;
 
-  if (cryptoListData.isError || todaySpotPriceData.isError || yesterdaySpotPriceData.isError || tradePairListData.isError) {
+  if (cryptoListData.isError || tradePairListData.isError || cryptoListMarketData.isError || coinbaseTodaySpotPrice.isError || coinbasePreviousSpotPrice.isError) {
     return <Text>An error occurred while fetching data.</Text>;
   }
-  const cryptoList = [...(cryptoListData.data.data as CryptoData[])];
-  const todaySpotPriceList = [...(todaySpotPriceData.data.data as SpotPrice[])];
-  const yesterdaySpotPriceList = [...(yesterdaySpotPriceData.data.data as SpotPrice[])];
+  const cryptoList = [...(cryptoListData.data.data as CryptoProductData[])];
   const tradePairList = [...(tradePairListData.data as TradingPair[])];
-  let cryptoFeaturedDataList: CryptoFeaturedData[] = [];
-  for (const cryptoItem of cryptoList) {
-    const currentPriceEntry = _.find(todaySpotPriceList, ['base', cryptoItem.code]);
-    const previousPriceEntry = _.find(yesterdaySpotPriceList, ['base', cryptoItem.code]);
-    const tradeAbleEntry = _.find(tradePairList, (tradeEntry) => {
-      return !tradeEntry.trading_disabled && tradeEntry.id.includes(cryptoItem.code);
-    });
-    const currentPrice = parseFloat(currentPriceEntry?.amount as string);
-    const previousPrice = parseFloat(previousPriceEntry?.amount as string);
-    const diffPrice = currentPrice - previousPrice;
-    const featuredData: CryptoFeaturedData = {
-      id: cryptoFeaturedDataList.length + 1,
-      name: cryptoItem.name,
-      symbol: cryptoItem.code,
-      value: `${FEATURED_FIAT_CURRENCY_SYMBOL}${currentPrice.toFixed(CURRENCY_PRECISION)}`,
-      change: _.round(100 * diffPrice / previousPrice, CURRENCY_PRECISION),
-      tradeAble: !!tradeAbleEntry,
-      icon: `/images/products/${cryptoItem.code.toLowerCase()}.svg`,
-    };
-    cryptoFeaturedDataList.push(featuredData);
-  }
-  cryptoFeaturedDataList = _.sortBy(cryptoFeaturedDataList, 'sort_index');
+  const cryptoMarketDataList = [...(cryptoListMarketData.data.data as CryptoMarketData[])];
+  const todaySpotPriceList = [...(coinbaseTodaySpotPrice.data.data as SpotPrice[])];
+  const previousSpotPriceList = [...(coinbasePreviousSpotPrice.data.data as SpotPrice[])];
+  const cryptoFeaturedDataList: CryptoFeaturedProductData[] = calculateFeaturedCrypto(
+    cryptoList,
+    tradePairList,
+    todaySpotPriceList,
+    previousSpotPriceList,
+    cryptoMarketDataList
+  );
   return (
     <Container size="xl">
       <CryptoTable data={cryptoFeaturedDataList} />
