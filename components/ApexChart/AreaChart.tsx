@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export type AreaChartProps = {
-  series,
+  series: any,
 };
 export default function AreaChart({ series }: AreaChartProps) {
   const options = {
@@ -13,12 +13,22 @@ export default function AreaChart({ series }: AreaChartProps) {
       type: 'datetime',
     },
     tooltip: {
-      enable: false,
+    },
+    dataLabels: {
+      enabled: false
+    },
+    legend: {
+      show: false
     }
   };
+
   return (
     <>
-      <Chart type="area" series={series} options={options} height={350} />
+      <Chart
+        type="area" series={series}
+        // @ts-ignore
+        options={options} height={350}
+      />
     </>
   )
 }
