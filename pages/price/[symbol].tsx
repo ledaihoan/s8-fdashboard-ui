@@ -103,7 +103,7 @@ export default function PricePage() {
             {/* Placeholder for chart */}
             <Paper h={400} mt="md" bg="gray.1">
               <div>
-                <AreaChart series={cryptoCandleSeries} height={350} />
+                <AreaChart series={cryptoCandleSeries} />
               </div>
             </Paper>
             <Text size="xs" mt="sm" c="dimmed">Last updated: 4:20 PM, Jul 7, 2024</Text>
