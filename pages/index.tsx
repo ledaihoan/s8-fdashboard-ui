@@ -79,7 +79,9 @@ export default function IndexPage() {
 
   const topFeaturedWidgets = topFeaturedDataList.map((coin) => (
     <Link key={coin.symbol} href={`/price/${coin.symbol}`} passHref legacyBehavior>
-      <FeaturedCryptoCard coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
+      <>
+        <FeaturedCryptoCard coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
+      </>
     </Link>
   ));
 

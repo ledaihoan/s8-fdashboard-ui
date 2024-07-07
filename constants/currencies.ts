@@ -1,6 +1,7 @@
 export const SUPPORTED_FIAT_CURRENCIES = {
   USD: 'USD',
-  EUR: 'EUR'
+  EUR: 'EUR',
+  GBP: 'GBP'
 };
 export const MAIN_CURRENCY = SUPPORTED_FIAT_CURRENCIES.USD;
 

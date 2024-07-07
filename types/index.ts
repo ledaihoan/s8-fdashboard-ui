@@ -4,6 +4,7 @@ import {CryptoMarketData} from "./crypto-market-data";
 export * from './trading-pair';
 export * from './crypto-product-data';
 export * from './spot-price';
+export * from './candle-data';
 
 export type CryptoFeaturedProductData = CryptoProductData & Omit<CryptoMarketData, 'rank' | 'changePercent24Hr'> & {
   icon: string;
