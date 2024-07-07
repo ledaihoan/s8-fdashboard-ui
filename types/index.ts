@@ -12,6 +12,7 @@ export type CryptoFeaturedProductData = CryptoProductData & Omit<CryptoMarketDat
   changePercent24Hr: number;
 };
 
+// Old deprecated, presented in page home.tsx
 export type CryptoFeaturedData = {
   id: number;
   name: string;

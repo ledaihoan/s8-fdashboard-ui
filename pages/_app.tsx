@@ -1,7 +1,6 @@
 import "@mantine/core/styles.css";
 import {MantineProvider} from "@mantine/core";
 import {
-  HydrationBoundary,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
@@ -15,12 +14,12 @@ export default function App({ Component, pageProps }: any) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={pageProps.dehydratedState}>
+      {/*<HydrationBoundary state={pageProps.dehydratedState}>*/}
         <MantineProvider theme={theme}>
           <HtmlHead/>
           <BaseBodyLayout Component={Component} pageProps={pageProps} />
         </MantineProvider>
-      </HydrationBoundary>
+      {/*</HydrationBoundary>*/}
     </QueryClientProvider>
   );
 }
