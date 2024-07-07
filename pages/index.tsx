@@ -78,17 +78,11 @@ export default function IndexPage() {
   ).slice(0, NUMBER_OF_FEATURED_CRYPTO_CURRENCIES);
 
   const topFeaturedWidgets = topFeaturedDataList.map((coin) => (
-    <Link key={coin.symbol} href={`/price/${coin.symbol}`} passHref legacyBehavior>
-      <>
-        <FeaturedCryptoCard coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
-      </>
-    </Link>
+    <FeaturedCryptoCard key={'featured' + coin.symbol} coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
   ));
 
   const topGainerWidgets = topGainerDataList.map((coin) => (
-    <Link key={coin.symbol} href={`/price/${coin.symbol}`} passHref legacyBehavior>
-      <FeaturedCryptoCard coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
-    </Link>
+    <FeaturedCryptoCard key={'gainer' + coin.symbol} coin={coin} fiatCurrency={FEATURED_FIAT_CURRENCY_SYMBOL} />
   ));
 
   return (
