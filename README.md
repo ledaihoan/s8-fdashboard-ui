@@ -3,7 +3,16 @@ This is the demo project of me which is related to technical assessment round of
 Try the live version at: https://s8-fd-ui.technoma.tech
 
 ## Guide for local run and deployment:
-- Will soon be available at https://github.com/ledaihoan/s8-fd-devops.git
+- Install NVM.sh and NodeJS: https://github.com/nvm-sh/nvm
+- Install Docker: https://docs.docker.com/engine/install/
+- Detailed guide will soon be available at https://github.com/ledaihoan/s8-fd-devops.git
+```shell
+# Use this for deploy to server with nvm, node and pm2 installed
+# env name is development/production
+./runservice.sh development
+# Use this to local run with docker
+./run_with_docker.sh
+```
 ## Further development ideas
 - To apply existing Infrastructure solution (prefer AWS as related to my previous working experience & knowledge)
   - Resource store: AWS S3
