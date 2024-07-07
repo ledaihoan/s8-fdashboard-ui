@@ -19,7 +19,7 @@ export const QUERY_KEY_WRAPPER = {
     const defaultStart = defaultEnd - CANDLE_BATCH_SIZES * granularity;
     const startKey = start || defaultStart;
     const endKey = end || defaultEnd;
-    return ['coinbase', `product_candle_${productId}_${granularity}_${startKey}_${endKey}`];
+    return ['coinbase', 'product_candles', productId, granularity, startKey, endKey];
   }
 };
 

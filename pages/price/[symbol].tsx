@@ -92,6 +92,7 @@ export default function PricePage() {
   const changePercentage = 100 * priceChange / priceOld;
 
   const handleGranularityChange = function (selectedMenu: GranularityData) {
+    setIsLoading(true);
     const { start, end } = getCustomTimeRange(selectedMenu.granularity, selectedMenu.batchSize);
     setGranularity(selectedMenu.granularity);
     setStartTs(start);
