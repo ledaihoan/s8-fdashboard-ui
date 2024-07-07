@@ -59,6 +59,7 @@ export default function IndexPage() {
     const previousPrice = parseFloat(previousPriceEntry?.amount as string);
     const diffPrice = currentPrice - previousPrice;
     const featuredData: CryptoFeaturedData = {
+      id: cryptoFeaturedDataList.length + 1,
       name: cryptoItem.name,
       symbol: cryptoItem.code,
       value: `${FEATURED_FIAT_CURRENCY_SYMBOL}${currentPrice.toFixed(CURRENCY_PRECISION)}`,
@@ -82,9 +83,11 @@ export default function IndexPage() {
           <Text size="lg">
             Simply and securely buy, sell, and manage hundreds of cryptocurrencies.
           </Text>
-          <Button variant="filled" color="blue" style={{ alignSelf: 'flex-start', marginTop: 20 }}>
-            See more assets
-          </Button>
+          <Link href={'/explore'} passHref legacyBehavior>
+            <Button variant="filled" color="blue" style={{ alignSelf: 'flex-start', marginTop: 20 }}>
+              See more assets
+            </Button>
+          </Link>
         </Stack>
 
         <Stack gap="xs" style={{ flex: 1 }} mt={{ base: 20, md: 0 }}>
