@@ -21,8 +21,8 @@ import {IconChevronRight, IconDownload, IconStar} from "@tabler/icons-react";
 import {useGetCryptoCandles} from "../../http/coinbase";
 import {MAIN_CURRENCY} from "../../constants";
 import {CANDLES_GRANULARITY} from "../../constants/candles";
-import {getDefaultTimeRange} from "../../utils/timestamp-utils";
-import {CryptoProductData, SpotPrice, TradingPair} from "../../types";
+import {getCustomTimeRange, getDefaultTimeRange} from "../../utils/timestamp-utils";
+import {CryptoProductData, GranularityData, SpotPrice, TradingPair} from "../../types";
 import {CryptoMarketData} from "../../types/crypto-market-data";
 import {formatCandleData} from "../../utils/candle-data-utils";
 import AreaChart from "../../components/ApexChart/AreaChart";
@@ -60,6 +60,13 @@ export default function PricePage() {
     return <Text>An error occurred while fetching data.</Text>;
   }
 
+  const granularityMenus = [
+    { label: '1H', granularity: CANDLES_GRANULARITY.ONE_MINUTES, batchSize: 60 },
+    { label: '1D', granularity: CANDLES_GRANULARITY.AN_HOUR, batchSize: 24 },
+    { label: '1W', granularity: CANDLES_GRANULARITY.SIX_HOURS, batchSize: 28 },
+    { label: '1M', granularity: CANDLES_GRANULARITY.ONE_DAY, batchSize: 30 },
+    { label: '1Y', granularity: CANDLES_GRANULARITY.ONE_DAY, batchSize: 300}
+  ];
   const cryptoList = [...(
     _.get(cryptoListData, 'data.data') || [] as CryptoProductData[]
   )];
@@ -70,7 +77,6 @@ export default function PricePage() {
     _.get(cryptoCandleData, 'data') || [] as number[][]
   )];
   const cryptoCandles = formatCandleData(cryptoCandleList);
-  console.log(cryptoCandleList[0], cryptoCandles[0]);
   const cryptoCandleSeries = [
     { name: 'Open', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.open]) },
     { name: 'Close', data: cryptoCandles.map(candle => [candle.timestamp * 1000, candle.close]) },
@@ -82,8 +88,15 @@ export default function PricePage() {
   const cryptoMarketData = _.find(cryptoMarketDataList, item => item.symbol === cryptoCode.toUpperCase());
   const priceNew = cryptoCandles[0].close;
   const priceOld = cryptoCandles[cryptoCandles.length - 1].close;
-  const priceChange = priceOld - priceNew;
+  const priceChange = priceNew - priceOld;
   const changePercentage = 100 * priceChange / priceOld;
+
+  const handleGranularityChange = function (selectedMenu: GranularityData) {
+    const { start, end } = getCustomTimeRange(selectedMenu.granularity, selectedMenu.batchSize);
+    setGranularity(selectedMenu.granularity);
+    setStartTs(start);
+    setEndTs(end);
+  };
   return cryptoProductData && cryptoMarketData && (
     <Container size="xl">
       <Group mb="xl">
@@ -110,10 +123,10 @@ export default function PricePage() {
           <Paper p="md" withBorder>
             <Text size="sm" c="dimmed">{ cryptoProductData.code } Price</Text>
             <Title order={2}>${ cryptoMarketData.priceUsd }</Title>
-            <Text c={priceChange > 0 ? 'green': 'red'}>${priceChange.toFixed(2)} ({changePercentage.toFixed(2)}%)</Text>
+            <Text c={priceChange > 0 ? 'green': 'red'}>${Math.abs(priceChange).toFixed(2)} ({changePercentage.toFixed(2)}%)</Text>
             <Group mt="md" gap="xs">
-              {['1H', '1D', '1W', '1M', '1Y', 'ALL'].map((period) => (
-                <Button key={period} variant="default" size="xs">{period}</Button>
+              {granularityMenus.map((menu) => (
+                <Button onClick={() => handleGranularityChange(menu)} key={menu.label} variant="default" size="xs">{menu.label}</Button>
               ))}
             </Group>
             {/* Placeholder for chart */}

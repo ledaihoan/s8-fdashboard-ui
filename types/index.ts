@@ -26,3 +26,9 @@ export type CryptoFeaturedData = {
   supply?: string;
   icon: string;
 };
+
+export type GranularityData = {
+  label: string;
+  granularity: number;
+  batchSize: number;
+};
