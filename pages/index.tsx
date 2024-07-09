@@ -114,7 +114,7 @@ export default function IndexPage() {
             </Text>
             <Text
               onClick={() => setActiveFeaturedWidget('gainer')}
-              size="sm" fw={700}
+              size="sm" fw={700} px={10} py={5}
               className={activeFeaturedWidget === 'gainer' ? classes.activeLabel : ''}
             >Top gainers</Text>
           </Group>
