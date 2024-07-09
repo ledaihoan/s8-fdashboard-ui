@@ -16,7 +16,7 @@ export default function FeaturedCryptoCard({ coin }: FeaturedCryptoCardProps): J
       <Paper p="md" radius="md" withBorder>
         <Group mb="xs">
           <Text fw={700}>{coin.name}</Text>
-          <Text size="xs" c="dimmed">{coin.code}</Text>
+          <Text size="xs" c={coin.color}>{coin.code}</Text>
         </Group>
         <Text size="sm">{localizedPriceDisplay}</Text>
         <Group gap={5} mt={5}>

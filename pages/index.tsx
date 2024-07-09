@@ -20,6 +20,7 @@ import {
   FEATURED_FIAT_CURRENCY_SYMBOL,
   NUMBER_OF_FEATURED_CRYPTO_CURRENCIES
 } from "../constants";
+import classes from './index.module.css';
 import {CryptoMarketData} from "../types/crypto-market-data";
 import FeaturedCryptoCard from "../components/FeaturedCryptoCard/FeaturedCryptoCard";
 import {calculateFeaturedCrypto} from "../utils/featured-crypto";
@@ -89,14 +90,14 @@ export default function IndexPage() {
     <Container size="xl">
       <Flex align="flex-start" mt={50} direction={{ base: 'column', md: 'row' }}>
         <Stack gap="xs" style={{ flex: 1 }}>
-          <Title order={2} style={{ color: '#4c6ef5' }}>
+          <Title order={2} style={{ color: '#1A55FF' }}>
             Explore crypto like Bitcoin, Ethereum, and Dogecoin
           </Title>
           <Text size="lg">
             Simply and securely buy, sell, and manage hundreds of cryptocurrencies.
           </Text>
           <Link href={'/explore'} passHref legacyBehavior>
-            <Button variant="filled" color="blue" style={{ alignSelf: 'flex-start', marginTop: 20 }}>
+            <Button variant="filled" color="#1A55FF" style={{ alignSelf: 'flex-start', marginTop: 20 }}>
               See more assets
             </Button>
           </Link>
@@ -107,11 +108,15 @@ export default function IndexPage() {
             <Text
               onClick={() => setActiveFeaturedWidget('trade')}
               size="sm" fw={700} px={10} py={5}
-              style={{ border: '1px solid #e9ecef', borderRadius: 16 }}
+              className={activeFeaturedWidget === 'trade' ? classes.activeLabel : ''}
             >
               Tradable
             </Text>
-            <Text onClick={() => setActiveFeaturedWidget('gainer')} size="sm" fw={700}>Top gainers</Text>
+            <Text
+              onClick={() => setActiveFeaturedWidget('gainer')}
+              size="sm" fw={700}
+              className={activeFeaturedWidget === 'gainer' ? classes.activeLabel : ''}
+            >Top gainers</Text>
           </Group>
 
           <SimpleGrid cols={3} spacing="md">
