@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/code-highlight": "^7.11.2",
     "@mantine/core": "7.11.1",
     "@mantine/hooks": "7.11.1",
     "@tabler/icons-react": "^3.9.0",

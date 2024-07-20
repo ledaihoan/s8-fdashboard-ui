@@ -1,14 +1,15 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {Box, Code, Container, Group, Loader, Text} from "@mantine/core";
+import {Box, Code, Container, Group, Loader, Stack, Text, Title} from "@mantine/core";
 import io, {Socket} from 'socket.io-client';
+import {CodeHighlight} from "@mantine/code-highlight";
 
 export default function PriceWsPage () {
   const [isLoading, setIsLoading] = useState(true);
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  const [currentData, setCurrentData] = useState<any>(null);
+  const [currentData, setCurrentData] = useState<any[]>([]);
   const router = useRouter();
   const cryptoCode = router.query.symbol as string;
 
@@ -54,7 +55,11 @@ export default function PriceWsPage () {
       });
 
       ws.on('update', (event) => {
-        setCurrentData(JSON.stringify(event));
+        setCurrentData(currentArray => {
+          const newData = JSON.parse(event.data);
+          const updatedData = [newData, ...currentArray];
+          return updatedData.slice(-100);
+        });
       });
 
       ws.on('connect_error', (error) => {
@@ -89,9 +94,14 @@ export default function PriceWsPage () {
           <Text size="xl" fw={700}>{ cryptoCode }</Text>
         </Group>
         <Group>
-          <Box>
-            <Code>{ currentData }</Code>
-          </Box>
+          <Stack gap="md">
+            {currentData.map((data, index) => (
+              <Box key={index}>
+                <Title order={4} mb="xs">{index + 1} { '=>' } { data.time }</Title>
+                <CodeHighlight code={JSON.stringify(data, null, 2)} language="json" />
+              </Box>
+            ))}
+          </Stack>
         </Group>
       </Group>
     </Container>
