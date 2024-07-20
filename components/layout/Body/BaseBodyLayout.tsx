@@ -8,7 +8,7 @@ export default function BaseBodyLayout({ Component, pageProps }: any) {
   const appMenus: AppMenu[] = [
     { href: '/', name: 'Home' },
     { href: '/explore', name: 'Explore' },
-    { href: '#', name: 'Learn' },
+    { href: '/price-ws/btc', name: 'Websocket Demo' },
     { href: '#', name: 'Individuals' },
     { href: '#', name: 'Businesses' },
     { href: '#', name: 'Developers' },
